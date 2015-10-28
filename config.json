@@ -1,0 +1,27 @@
+{
+  "gateway": {
+	"label": "Gateway",
+	"type": "String",
+	"required": false,
+	"help": "APNS Gateway"
+  },
+  "passphrase": {
+	"label": "Passphrase",
+	"type": "String",
+	"required": false,
+	"help": "Passphrase"
+  },
+  "production": {
+	"label": "Passphrase",
+	"type": "String",
+	"required": true,
+	"help": "Passphrase"
+  },
+  "port": {
+	"label": "Port",
+	"type": "Integer",
+	"required": false,
+	"help": "Port"
+  }
+
+}
