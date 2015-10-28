@@ -1,6 +1,6 @@
 {
-  "name": "gcm-connector",
-  "description": "Google Cloud Messaging Connector for the Reekoh IoT Platform. ",
+  "name": "apns-connector",
+  "description": "Apple Push Notification Service Connector for the Reekoh IoT Platform. ",
   "version": "0.0.1",
   "author": "Reekoh, Inc.",
   "main": "app.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Reekoh/gcm-connector"
+    "url": "https://github.com/Reekoh/apns-connector"
   },
   "dependencies": {
     "apn":"^1.7.5",
