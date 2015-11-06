@@ -21,6 +21,14 @@ platform.on('data', function (data) {
 	//data.tokens = array of device IDs
 	connection.pushNotification(note, data.tokens);
 
+	connection.on('error', function (error) {
+		platform.handleException(error);
+	});
+
+	connection.on('socketError', function (error) {
+		platform.handleException(error);
+	});
+
 	connection.on('transmissionError', function (errorCode, notification, device) {
 
 		platform.handleException(errorCode);
