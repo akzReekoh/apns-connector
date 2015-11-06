@@ -4,6 +4,9 @@ var _      = require('lodash'),
 	cp     = require('child_process'),
 	should = require('should'),
 	connector;
+//NOTE
+//This is commented as of the moment as this will produce an error because there is no valid APN cert and key yet.
+//APNS account needs approval
 
 //describe('Connector', function () {
 //	this.slow(8000);

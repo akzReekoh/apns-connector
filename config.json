@@ -1,4 +1,16 @@
 {
+  "certData": {
+	"label": "Certificate Data",
+	"type": "String",
+	"required": true,
+	"help": "APNS Certificate Data"
+  },
+  "keyData": {
+	"label": "Key Data",
+	"type": "String",
+	"required": true,
+	"help": "APNS Key Data"
+  },
   "gateway": {
 	"label": "Gateway",
 	"type": "String",
@@ -12,16 +24,16 @@
 	"help": "Passphrase"
   },
   "production": {
-	"label": "Passphrase",
-	"type": "String",
+	"label": "Production",
+	"type": "Boolean",
 	"required": true,
-	"help": "Passphrase"
+	"help": "Configuration to connect to Production service."
   },
   "port": {
 	"label": "Port",
-	"type": "Integer",
+	"type": "Number",
 	"required": false,
-	"help": "Port"
+	"help": "Connection Port"
   }
 
 }

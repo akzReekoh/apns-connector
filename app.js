@@ -21,6 +21,11 @@ platform.on('data', function (data) {
 	//data.tokens = array of device IDs
 	connection.pushNotification(note, data.tokens);
 
+	connection.on('transmissionError', function (errorCode, notification, device) {
+
+		platform.handleException(errorCode);
+	});
+
 	console.log(data);
 });
 
@@ -29,18 +34,29 @@ platform.on('data', function (data) {
  */
 platform.on('close', function () {
 
-	async.series([
+	try {
+
+		async.series([
 			function (cb) {
 				connection.shutdown();
 				cb(null);
 			},
 
-		    function(cb) {
+			function (cb) {
 				platform.notifyClose();
 				cb(null);
 			}
 
-		], function (err, results) {});
+		], function (err, results) {
+		});
+
+	} catch (ex) {
+
+		platform.handleException(ex);
+	}
+
+
+
 });
 
 /*
@@ -48,10 +64,11 @@ platform.on('close', function () {
  */
 platform.once('ready', function (options) {
 
-
 	var connection_options = {
-		cert: __dirname + '/../../cert/cert.pem',
-		key: __dirname + '/../../cert/key.pem'
+		//certFile: __dirname + '/../../cert/cert.pem',
+		//keyFile: __dirname + '/../../cert/key.pem'
+		certData: options.certData,
+		keyData: options.keyData
 	};
 
 	if (options.gateway)
@@ -66,6 +83,22 @@ platform.once('ready', function (options) {
 
 	connection = apn.connection(connection_options);
 
-	console.log(options);
-	platform.notifyReady();
+	connection.on('connected', function () {
+		platform.notifyReady();
+	});
+
+	connection.on('error', function (error) {
+		platform.handleException(error);
+	});
+
+	connection.on('socketError', function (error) {
+		platform.handleException(error);
+	});
+
+	connecrtion.on('cacheTooSmall', function (sizeDiff) {
+		platform.handleException(sizeDiff);
+	});
+
+
+
 });
