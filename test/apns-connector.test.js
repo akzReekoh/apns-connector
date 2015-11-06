@@ -1,7 +1,6 @@
 'use strict';
 
-var _      = require('lodash'),
-	cp     = require('child_process'),
+var cp     = require('child_process'),
 	should = require('should'),
 	connector;
 //NOTE
