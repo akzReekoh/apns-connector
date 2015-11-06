@@ -1,21 +1,21 @@
 {
-  "certData": {
+  "cert": {
 	"label": "Certificate Data",
-	"type": "String",
+	"type": "Text",
 	"required": true,
 	"help": "APNS Certificate Data"
   },
-  "keyData": {
+  "key": {
 	"label": "Key Data",
-	"type": "String",
+	"type": "Text",
 	"required": true,
 	"help": "APNS Key Data"
   },
-  "gateway": {
-	"label": "Gateway",
-	"type": "String",
-	"required": false,
-	"help": "APNS Gateway"
+  "ca": {
+	"label": "Certificate Authority",
+	"type": "Text",
+	"required": true,
+	"help": "Certificate Authority"
   },
   "passphrase": {
 	"label": "Passphrase",

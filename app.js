@@ -31,10 +31,10 @@ platform.on('data', function (data) {
 
 	connection.on('transmissionError', function (errorCode, notification, device) {
 
-		platform.handleException(errorCode);
+		platform.handleException(new Error('Error: ' + errorCode + ' Notification: ' + notification + ' Device: ' + device));
+
 	});
 
-	console.log(data);
 });
 
 /*
@@ -42,27 +42,18 @@ platform.on('data', function (data) {
  */
 platform.on('close', function () {
 
-	try {
+	var domain = require('domain');
+	var d = domain.create();
 
-		async.series([
-			function (cb) {
-				connection.shutdown();
-				cb(null);
-			},
+	d.on('error', function (error) {
+		platform.handleException(error);
+		platform.notifyClose();
+	});
 
-			function (cb) {
-				platform.notifyClose();
-				cb(null);
-			}
-
-		], function (err, results) {
-		});
-
-	} catch (ex) {
-
-		platform.handleException(ex);
-	}
-
+	d.run(function () {
+		connection.shutdown();
+		platform.notifyClose();
+	});
 
 
 });
@@ -73,25 +64,23 @@ platform.on('close', function () {
 platform.once('ready', function (options) {
 
 	var connection_options = {
-		//certFile: __dirname + '/../../cert/cert.pem',
-		//keyFile: __dirname + '/../../cert/key.pem'
-		certData: options.certData,
-		keyData: options.keyData
+		cer: options.certData,
+		key: options.keyData
 	};
 
-	if (options.gateway)
-		connection_options['gateway'] = options.gateway;
+    if (options.ca)
+	   connection_options.ca = options.ca;
 
 	if (options.passphrase)
-		connection_options['passphrase'] = options.passphrase;
+		connection_options.passphrase = options.passphrase;
 
 	if (options.port)
-		connection_options['port'] = options.port;
-
+		connection_options.port = options.port;
 
 	connection = apn.connection(connection_options);
 
 	connection.on('connected', function () {
+		platform.log('APNS Connector has initialized');
 		platform.notifyReady();
 	});
 
@@ -104,7 +93,7 @@ platform.once('ready', function (options) {
 	});
 
 	connecrtion.on('cacheTooSmall', function (sizeDiff) {
-		platform.handleException(sizeDiff);
+		platform.handleException(new Error('Error: Cache size is too small'));
 	});
 
 
