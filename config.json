@@ -1,9 +1,21 @@
 {
-  "gateway": {
-	"label": "Gateway",
-	"type": "String",
-	"required": false,
-	"help": "APNS Gateway"
+  "cert": {
+	"label": "Certificate Data",
+	"type": "Text",
+	"required": true,
+	"help": "APNS Certificate Data"
+  },
+  "key": {
+	"label": "Key Data",
+	"type": "Text",
+	"required": true,
+	"help": "APNS Key Data"
+  },
+  "ca": {
+	"label": "Certificate Authority",
+	"type": "Text",
+	"required": true,
+	"help": "Certificate Authority"
   },
   "passphrase": {
 	"label": "Passphrase",
@@ -12,16 +24,16 @@
 	"help": "Passphrase"
   },
   "production": {
-	"label": "Passphrase",
-	"type": "String",
+	"label": "Production",
+	"type": "Boolean",
 	"required": true,
-	"help": "Passphrase"
+	"help": "Configuration to connect to Production service."
   },
   "port": {
 	"label": "Port",
-	"type": "Integer",
+	"type": "Number",
 	"required": false,
-	"help": "Port"
+	"help": "Connection Port"
   }
 
 }

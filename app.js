@@ -21,7 +21,20 @@ platform.on('data', function (data) {
 	//data.tokens = array of device IDs
 	connection.pushNotification(note, data.tokens);
 
-	console.log(data);
+	connection.on('error', function (error) {
+		platform.handleException(error);
+	});
+
+	connection.on('socketError', function (error) {
+		platform.handleException(error);
+	});
+
+	connection.on('transmissionError', function (errorCode, notification, device) {
+
+		platform.handleException(new Error('Error: ' + errorCode + ' Notification: ' + notification + ' Device: ' + device));
+
+	});
+
 });
 
 /*
@@ -29,18 +42,20 @@ platform.on('data', function (data) {
  */
 platform.on('close', function () {
 
-	async.series([
-			function (cb) {
-				connection.shutdown();
-				cb(null);
-			},
+	var domain = require('domain');
+	var d = domain.create();
 
-		    function(cb) {
-				platform.notifyClose();
-				cb(null);
-			}
+	d.on('error', function (error) {
+		platform.handleException(error);
+		platform.notifyClose();
+	});
 
-		], function (err, results) {});
+	d.run(function () {
+		connection.shutdown();
+		platform.notifyClose();
+	});
+
+
 });
 
 /*
@@ -48,24 +63,39 @@ platform.on('close', function () {
  */
 platform.once('ready', function (options) {
 
-
 	var connection_options = {
-		cert: __dirname + '/../../cert/cert.pem',
-		key: __dirname + '/../../cert/key.pem'
+		cer: options.certData,
+		key: options.keyData
 	};
 
-	if (options.gateway)
-		connection_options['gateway'] = options.gateway;
+    if (options.ca)
+	   connection_options.ca = options.ca;
 
 	if (options.passphrase)
-		connection_options['passphrase'] = options.passphrase;
+		connection_options.passphrase = options.passphrase;
 
 	if (options.port)
-		connection_options['port'] = options.port;
-
+		connection_options.port = options.port;
 
 	connection = apn.connection(connection_options);
 
-	console.log(options);
-	platform.notifyReady();
+	connection.on('connected', function () {
+		platform.log('APNS Connector has initialized');
+		platform.notifyReady();
+	});
+
+	connection.on('error', function (error) {
+		platform.handleException(error);
+	});
+
+	connection.on('socketError', function (error) {
+		platform.handleException(error);
+	});
+
+	connecrtion.on('cacheTooSmall', function (sizeDiff) {
+		platform.handleException(new Error('Error: Cache size is too small'));
+	});
+
+
+
 });
