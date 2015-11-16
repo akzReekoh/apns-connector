@@ -16,18 +16,19 @@
 	"type": "Text",
 	"required": true,
 	"help": "Certificate Authority"
-  },
+  },s
   "passphrase": {
 	"label": "Passphrase",
 	"type": "String",
 	"required": false,
-	"help": "Passphrase"
+	"help": "(Optional) The passphrase for the connection key"
   },
   "production": {
 	"label": "Production",
 	"type": "Boolean",
 	"required": true,
-	"help": "Configuration to connect to Production service."
+	"default": false,
+	"help": "Specifies which environment to connect to: Production (if true) or Sandbox. Default: false"
   },
   "port": {
 	"label": "Port",
@@ -35,5 +36,4 @@
 	"required": false,
 	"help": "Connection Port"
   }
-
 }
