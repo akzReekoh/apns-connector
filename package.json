@@ -1,7 +1,7 @@
 {
   "name": "apns-connector",
   "description": "Apple Push Notification Service Connector for the Reekoh IoT Platform. ",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "Reekoh, Inc.",
   "main": "app.js",
   "scripts": {
@@ -12,8 +12,8 @@
     "url": "https://github.com/Reekoh/apns-connector"
   },
   "dependencies": {
-    "apn":"^1.7.5",
-    "async": "^1.4.2"
+    "apn": "^1.7.5",
+    "lodash": "^3.10.1"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
