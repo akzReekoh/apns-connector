@@ -12,16 +12,16 @@ platform.on('data', function (data) {
 	if (_.isEmpty(data.title))
 		return platform.handleException(new Error('Missing data parameter: title'));
 
-	if (_.isEmpty(data.message))
+	if (_.isEmpty(data.body))
 		return platform.handleException(new Error('Missing data parameter: message'));
 
-	if (_.isEmpty(data.tokens))
-		return platform.handleException(new Error('Missing data parameter: tokens'));
+	if (_.isEmpty(data.tokens) || !_.isArray(data.tokens))
+		return platform.handleException(new Error('Invalid or missing data parameter: tokens. Should be a valid Array.'));
 
 	var note = new apn.Notification();
 
 	note.setAlertTitle(data.title);
-	note.setAlertText(data.message);
+	note.setAlertText(data.body);
 	note.setBadge(1);
 
 	connection.pushNotification(note, data.tokens);
