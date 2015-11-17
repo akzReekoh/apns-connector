@@ -16,7 +16,7 @@
 	"type": "Text",
 	"required": true,
 	"help": "Certificate Authority"
-  },s
+  },
   "passphrase": {
 	"label": "Passphrase",
 	"type": "String",
