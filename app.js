@@ -1,7 +1,8 @@
 'use strict';
 
-var _        = require('lodash'),
-	apn      = require('apn'),
+var apn      = require('apn'),
+	isEmpty  = require('lodash.isempty'),
+	isArray  = require('lodash.isarray'),
 	platform = require('./platform'),
 	connection;
 
@@ -9,13 +10,13 @@ var _        = require('lodash'),
  * Listen for the data event.
  */
 platform.on('data', function (data) {
-	if (_.isEmpty(data.title))
+	if (isEmpty(data.title))
 		return platform.handleException(new Error('Missing data parameter: title'));
 
-	if (_.isEmpty(data.body))
+	if (isEmpty(data.body))
 		return platform.handleException(new Error('Missing data parameter: message'));
 
-	if (_.isEmpty(data.tokens) || !_.isArray(data.tokens))
+	if (isEmpty(data.tokens) || !isArray(data.tokens))
 		return platform.handleException(new Error('Invalid or missing data parameter: tokens. Should be a valid Array.'));
 
 	var note = new apn.Notification();
@@ -34,14 +35,16 @@ platform.on('close', function () {
 	var domain = require('domain');
 	var d = domain.create();
 
-	d.on('error', function (error) {
+	d.once('error', function (error) {
 		platform.handleException(error);
 		platform.notifyClose();
+		d.exit();
 	});
 
 	d.run(function () {
 		connection.shutdown();
 		platform.notifyClose();
+		d.exit();
 	});
 });
 
