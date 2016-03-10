@@ -3,13 +3,12 @@
 var apn      = require('apn'),
 	isEmpty  = require('lodash.isempty'),
 	isArray  = require('lodash.isarray'),
+	isPlainObject = require('lodash.isplainobject'),
+	async = require(async),
 	platform = require('./platform'),
 	connection;
 
-/*
- * Listen for the data event.
- */
-platform.on('data', function (data) {
+let sendData = (data) => {
 	if (isEmpty(data.title))
 		return platform.handleException(new Error('Missing data parameter: title'));
 
@@ -26,11 +25,21 @@ platform.on('data', function (data) {
 	note.setBadge(1);
 
 	connection.pushNotification(note, data.tokens);
+};
+
+platform.on('data', function (data) {
+	if(isPlainObject(data)){
+		sendData(data);
+	}
+	else if(isArray(data)){
+		async.each(data, (datum) => {
+			sendData(datum);
+		});
+	}
+	else
+		platform.handleException(new Error(`Invalid data received. Data must be a valid Array/JSON Object or a collection of objects. Data: ${data}`));
 });
 
-/*
- * Event to listen to in order to gracefully release all resources bound to this service.
- */
 platform.on('close', function () {
 	var domain = require('domain');
 	var d = domain.create();
@@ -48,9 +57,6 @@ platform.on('close', function () {
 	});
 });
 
-/*
- * Listen for the ready event.
- */
 platform.once('ready', function (options) {
 	if (options.production === null || options.production === undefined || options.production === '')
 		options.production = false;
