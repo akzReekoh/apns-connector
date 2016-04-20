@@ -8,32 +8,48 @@ var apn      = require('apn'),
 	platform = require('./platform'),
 	connection;
 
-let sendData = (data) => {
-	if (isEmpty(data.title))
-		return platform.handleException(new Error('Missing data parameter: title'));
+let sendData = (data, callback) => {
+	let d = require('domain').create();
 
-	if (isEmpty(data.body))
-		return platform.handleException(new Error('Missing data parameter: message'));
+    d.once('error', (error) => {
+        callback(error);
+        d.exit();
+    });
 
-	if (isEmpty(data.tokens) || !isArray(data.tokens))
-		return platform.handleException(new Error('Invalid or missing data parameter: tokens. Should be a valid Array.'));
+    d.run(() => {
+        if (isEmpty(data.title))
+            callback(new Error('Missing data parameter: title'));
 
-	var note = new apn.Notification();
+        if (isEmpty(data.body))
+            callback(new Error('Missing data parameter: message'));
 
-	note.setAlertTitle(data.title);
-	note.setAlertText(data.body);
-	note.setBadge(1);
+        if (isEmpty(data.tokens) || !isArray(data.tokens))
+            callback(new Error('Invalid or missing data parameter: tokens. Should be a valid Array.'));
 
-	connection.pushNotification(note, data.tokens);
+        var note = new apn.Notification();
+
+        note.setAlertTitle(data.title);
+        note.setAlertText(data.body);
+        note.setBadge(1);
+
+        connection.pushNotification(note, data.tokens);
+        callback();
+    });
 };
 
 platform.on('data', function (data) {
 	if(isPlainObject(data)){
-		sendData(data);
+		sendData(data, (error) => {
+			console.error(error);
+			platform.handleException(error);
+		});
 	}
 	else if(isArray(data)){
-		async.each(data, (datum) => {
-			sendData(datum);
+		async.each(data, (datum, done) => {
+			sendData(datum, done);
+		}, (error) => {
+			console.error(error);
+			platform.handleException(error);
 		});
 	}
 	else
