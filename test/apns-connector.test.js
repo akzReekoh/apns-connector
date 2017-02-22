@@ -1,8 +1,8 @@
 'use strict';
 
-var cp     = require('child_process'),
+/*var cp     = require('child_process'),
 	should = require('should'),
-	connector;
+	connector;*/
 //NOTE
 //This is commented as of the moment as this will produce an error because there is no valid APN cert and key yet.
 //APNS account needs approval
