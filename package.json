@@ -27,6 +27,7 @@
     "gulp-mocha": "=2.2.0",
     "gulp-plumber": "=1.1.0",
     "gulp-standard": "=8.0.4",
+    "jshint": "=2.9.4",
     "mocha": "=2.4.5",
     "should": "=7.1.0"
   },
