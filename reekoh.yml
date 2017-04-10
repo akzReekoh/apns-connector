@@ -13,44 +13,44 @@ metadata:
     - iOS
     - apple
     - push notifications
-  config:
-    cert:
-      label: Certificate Data
-      type: Text
-      required: true
-      help: APNS Certificate Data
-      maxLength: 5000
-    key:
-      label: Key Data
-      type: Text
-      required: true
-      help: APNS Key Data
-      maxLength: 5000
-    ca:
-      label: Certificate Authority
-      type: Text
-      required: true
-      help: Certificate Authority
-      maxLength: 5000
-    passphrase:
-      label: Passphrase
-      type: String
-      required: false
-      help: "(Optional) The passphrase for the connection key"
-      maxLength: 1000
-    production:
-      label: Production
-      type: Boolean
-      required: true
-      default: false
-      help: 'Specifies which environment to connect to: Production (if true) or Sandbox.
-        Default: false'
-    port:
-      label: Port
-      type: Number
-      required: false
-      help: Connection Port
   release:
     version: 1.0.0
     notes: path/to/RELEASENOTESv1.0.0.md
     image: path/to/docker/image
+    config:
+        cert:
+          label: Certificate Data
+          type: Text
+          required: true
+          help: APNS Certificate Data
+          maxLength: 5000
+        key:
+          label: Key Data
+          type: Text
+          required: true
+          help: APNS Key Data
+          maxLength: 5000
+        ca:
+          label: Certificate Authority
+          type: Text
+          required: true
+          help: Certificate Authority
+          maxLength: 5000
+        passphrase:
+          label: Passphrase
+          type: String
+          required: false
+          help: "(Optional) The passphrase for the connection key"
+          maxLength: 1000
+        production:
+          label: Production
+          type: Boolean
+          required: true
+          default: false
+          help: 'Specifies which environment to connect to: Production (if true) or Sandbox.
+            Default: false'
+        port:
+          label: Port
+          type: Number
+          required: false
+          help: Connection Port
